@@ -110,7 +110,17 @@ def process_dataset(dataset_type='train'):
     source_stats = {'camera': 0, 'phone': 0}
 
     dataset_path = os.path.join("data", "raw", dataset_type)
-    label_csv_path = os.path.join("data", "raw", f"{dataset_type}_labels.csv")
+    label_csv_path = os.path.join("data", "manual_annotation", f"{dataset_type}_labels.csv")
+
+    print("Looking for label file at:", label_csv_path)
+
+    # Try loading label CSV if available
+    label_df = None
+    if os.path.exists(label_csv_path):
+        print("Label file found ✅")
+        label_df = pd.read_csv(label_csv_path).set_index("sample_id")
+    else:
+        print("[INFO] No label CSV found for '", dataset_type, "' – proceeding without labels.")
 
     # Try loading label CSV if available
     label_df = None
